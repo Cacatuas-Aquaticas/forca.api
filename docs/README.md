@@ -15,11 +15,11 @@ Este repositório contém a implementação do **backend do jogo da forca**. O o
 ## 📂 Estrutura do projeto
 
    📦 forca.client.back
-  - |- 📂 src
   - |- 📂 docs
       - |- 📜 README.md # Documentação do projeto
   - |- 📂 .github
       - |- 📜 PULL_REQUEST_TEMPLATE.md # Padronizar as descrições dos Pull Requests(PRs)
+  - |- 📂 src
   - |- 📂 controllers # Lógica das funcionalidade
   - |- 📂 models # Modelo de dados
   - |- 📂 services # Regras de negócios
