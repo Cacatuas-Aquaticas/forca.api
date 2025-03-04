@@ -4,7 +4,7 @@
 
 Este repositório contém a implementação do **backend do jogo da forca**. O objetivo deste projeto é fornecer a lógica de jogo, interações com o banco de dados e a API para que o frontend possa interagir com o backend.
 
-# 🔌 Tencnologias Utilizadas
+# 🔌 Tecnologias Utilizadas
 
 - **Node.js**: Utilizado para executar o JavaScript no backend.
 - **Express**: Framework para criação de APIs de forma rápida e eficiente.
