@@ -23,7 +23,6 @@ Este repositório contém a implementação do **backend do jogo da forca**. O o
   - |- 📂 controllers # Lógica das funcionalidade
   - |- 📂 models # Modelo de dados
   - |- 📂 services # Regras de negócios
-  - |- 📂 models # Modelo de dados
   - |- 📜 .env.examples # Exemplo de váriaveis de ambiente
   - |- 📜 server.js # Arquivo principal
   - |- 📜 package.json # Dependências e scripts
