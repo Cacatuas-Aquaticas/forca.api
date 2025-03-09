@@ -13,7 +13,7 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v2
 
-      # Etapa para configurar Node.js (se necessário)
+      # Etapa para configurar Node.js (se necessário) ...
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
