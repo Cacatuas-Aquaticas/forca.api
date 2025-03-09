@@ -31,26 +31,6 @@ services:
     depends_on:
       - db
 
-  backend-test:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: forca-backend-test
-    environment:
-      NODE_ENV: test
-      DB_HOST: db
-      DB_USER: root
-      DB_PASS: root
-      DB_NAME: forca
-    volumes:
-      - .:/app
-    networks:
-      - forca-network
-    depends_on:
-      - db
-      - backend
-    command: ["npm", "test"]
-
 volumes:
   db_data:
 
