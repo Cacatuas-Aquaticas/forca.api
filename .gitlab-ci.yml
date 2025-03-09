@@ -1,0 +1,27 @@
+stages:
+  - build
+  - test
+
+services:
+  - name: mysql:8
+    alias: db
+    command: ["--health-cmd=mysqladmin ping --silent"]
+
+before_script:
+  - apt-get update && apt-get install -y docker-compose
+
+build:
+  stage: build
+  script:
+    - docker-compose up -d db
+    - docker-compose up -d backend-test
+  only:
+    - main 
+
+test:
+  stage: test
+  script:
+    - docker-compose logs backend-test
+    - docker-compose down
+  only:
+    - main
