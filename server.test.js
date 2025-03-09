@@ -1,0 +1,12 @@
+const request = require("supertest");
+const express = require("express");
+
+const app = require("./server"); 
+
+describe("Testando o servidor", () => {
+  it("Deve retornar uma mensagem na rota raiz", async () => {
+    const res = await request(app).get("/");
+    expect(res.status).toBe(200);
+    expect(res.text).toBe("Joga da forca está rodando!");
+  });
+});
