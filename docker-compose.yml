@@ -6,9 +6,11 @@ services:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: forca
     ports:
-      - "3307:3306"  # Mapeando a porta 3306 do container para a 3307 do host
+      - "3307:3306"
     volumes:
       - db_data:/var/lib/mysql
+    networks:
+      - forca-network
 
   backend:
     build:
@@ -16,16 +18,38 @@ services:
       dockerfile: Dockerfile
     container_name: forca-backend
     environment:
-      DB_HOST: db  # Usando 'db' como hostname dentro do Docker
+      DB_HOST: db
       DB_USER: root
       DB_PASS: root
       DB_NAME: forca
     ports:
       - "3000:3000"
     volumes:
-      - .:/app  # Montando o diretório atual na pasta /app do container
+      - .:/app
     networks:
       - forca-network
+    depends_on:
+      - db
+
+  backend-test:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: forca-backend-test
+    environment:
+      NODE_ENV: test
+      DB_HOST: db
+      DB_USER: root
+      DB_PASS: root
+      DB_NAME: forca
+    volumes:
+      - .:/app
+    networks:
+      - forca-network
+    depends_on:
+      - db
+      - backend
+    command: ["npm", "test"]
 
 volumes:
   db_data:
