@@ -50,4 +50,3 @@ jobs:
       - name: Show logs if failure
         if: failure()
         run: docker-compose logs
-s
