@@ -13,7 +13,7 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v2
 
-      # Etapa para configurar Node.js (se necessário) ...
+      # Etapa para configurar Node.js (se necessário)
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
@@ -50,7 +50,6 @@ jobs:
       - name: Run tests in Docker container
         run: docker-compose exec backend-test npm test  # Ou o comando específico para rodar os testes
 
-      # Etapa opcional para mostrar logs caso os testes falhem
       - name: Show logs in case of failure
         if: failure()
         run: docker-compose logs
