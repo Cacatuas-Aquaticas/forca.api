@@ -3,7 +3,7 @@ name: CI/CD Pipeline
 on:
   push:
     branches:
-      - main  # Ou a sua branch de trabalho
+      - pipeline
 
 jobs:
   build:
