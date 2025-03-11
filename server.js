@@ -10,6 +10,8 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 app.use(cors());
+// app.use('/api',wordRoutes);
+app.use('/api',gameRoutes);
 
 app.get("/", (req, res) => {
   res.send("Jogo da forca está rodando!");
