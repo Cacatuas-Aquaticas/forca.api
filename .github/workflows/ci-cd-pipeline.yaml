@@ -14,11 +14,11 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v2
 
-      # Etapa 2: Configurar o Node.js
+      # Etapa 2: Configurar o Node.js (ajustado para versão 18)
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 22
+          node-version: 18
           cache: 'npm'
 
       # Etapa 3: Instalar as dependências do Node.js
@@ -36,17 +36,31 @@ jobs:
           sudo chmod +x /usr/local/bin/docker-compose
           docker-compose --version
 
-      # Etapa 6: Puxar e construir os containers com Docker Compose
-      - name: Pull and Build Docker containers
+      # Etapa 6: Puxar e construir os containers com Docker Compose (local/teste)
+      - name: Pull and Build Docker containers (local)
         run: |
           docker-compose pull
           docker-compose up --build -d
 
       # Etapa 7: Aguardar os containers estarem prontos
       - name: Wait for containers to be ready
-        run: sleep 15  # Você pode aumentar o tempo de espera se necessário
+        run: sleep 15
 
       # Etapa 8: Exibir logs dos containers caso algum erro ocorra
       - name: Show logs if failure
         if: failure()
         run: docker-compose logs
+
+      # Etapa 9: Deploy para EC2 via SSH
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            cd /home/${{ secrets.EC2_USER }}/forca-back
+            git pull origin main
+            docker-compose down
+            docker-compose pull
+            docker-compose up --build -d
