@@ -1,4 +1,4 @@
-const Word = require('../models/Word');
+const Word = require('../models/word');
 const { insertWords } = require('../services/wordServices');
 
 async function populateWords(req, res) {
