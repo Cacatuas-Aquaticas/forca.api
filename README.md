@@ -21,33 +21,30 @@
 ## 📐 Arquitetura de 3 Camadas (3-Tier)
 
 ```mermaid
-graph TD
-    subgraph "Nuvem (GCP — vpc-forca)"
-        direction TB
+graph LR
+    Internet((🌐 Internet))
 
-        Internet((🌐 Internet))
-
-        subgraph "Sub-rede Pública (10.0.1.0/24)"
-            FE["🖥️ forca-frontend\nNginx + HTML/CSS/JS\nPorta 80 / 8080"]
-        end
-
-        subgraph "Sub-rede Privada (10.0.2.0/24)"
-            BE["⚙️ forca-backend\nNode.js + Express\nPorta 3000"]
-            DB[("🗄️ forca-db\nMySQL 8\nPorta 3306")]
-        end
-
-        subgraph "Observabilidade"
-            PR["📡 Prometheus\nPorta 9090"]
-            GF["📊 Grafana\nPorta 3005"]
-        end
-
-        Internet -->|HTTP/HTTPS| FE
-        FE ==>|Proxy Reverso| BE
-        BE ==>|Tunnel VPN / ClusterIP| DB
-        PR -.->|Scrapes /metrics| BE
-        GF -->|Lê dados| PR
+    subgraph PUB["🟢 Sub-rede Pública — 10.0.1.0/24"]
+        FE["🖥️ forca-frontend\nNginx · Porta 80/8080"]
     end
+
+    subgraph PRIV["🔴 Sub-rede Privada — 10.0.2.0/24"]
+        BE["⚙️ forca-backend\nNode.js · Porta 3000"]
+        DB[("🗄️ forca-db\nMySQL 8 · Porta 3306")]
+    end
+
+    subgraph OBS["📊 Observabilidade"]
+        PR["📡 Prometheus\nPorta 9090"]
+        GF["📊 Grafana\nPorta 3005"]
+    end
+
+    Internet -->|"HTTP/HTTPS"| FE
+    FE ==>|"Proxy Reverso"| BE
+    BE ==>|"Túnel VPN / ClusterIP"| DB
+    PR -.->|"Scrapes /metrics"| BE
+    GF -->|"Lê dados"| PR
 ```
+
 
 ---
 
