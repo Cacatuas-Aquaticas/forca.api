@@ -1,3 +1,10 @@
 node_modules/
 forca_gcp_key*
 .env
+
+# Arquivos de debug e temporários
+*.ps1
+final_coverage.txt
+jest_out.json
+*.log
+coverage/
