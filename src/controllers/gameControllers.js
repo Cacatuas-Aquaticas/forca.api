@@ -6,10 +6,11 @@ async function getGameWord(req,res){
     const { date } = req.params;
 
     const requestDate = new Date(date);
-    const today = new Date();
-    const minDate = new Date("2024-12-25");
+    // Compare only the date string (YYYY-MM-DD) to avoid timezone offset bugs
+    const todayStr = new Date().toISOString().split('T')[0];
+    const minDate = "2024-12-25";
 
-    if(isNaN(requestDate) || requestDate < minDate || requestDate > today){
+    if(isNaN(requestDate) || date < minDate || date > todayStr){
         return res.status(400).json({error:"Data Inválida"});
     }
 
@@ -23,7 +24,7 @@ async function getGameWord(req,res){
         let wordEntry = await Word.findOne({ where: {used: false}});
 
         if(!wordEntry){
-            return res.status(500).json({error: "Nenhuma palavra disponível."});
+            return res.status(500).json({error: "Nenhuma palavra disponível. "});
         }
 
         wordEntry.used = true;
