@@ -24,11 +24,13 @@
 graph LR
     Internet((🌐 Internet))
 
-    subgraph PUB["🟢 Sub-rede Pública — 10.0.1.0/24"]
+    subgraph PUB["🟢 Sub-rede Pública"]
+        IP1["📍 10.0.1.0/24"]
         FE["🖥️ forca-frontend\nNginx · Porta 80/8080"]
     end
 
-    subgraph PRIV["🔴 Sub-rede Privada — 10.0.2.0/24"]
+    subgraph PRIV["🔴 Sub-rede Privada"]
+        IP2["📍 10.0.2.0/24"]
         BE["⚙️ forca-backend\nNode.js · Porta 3000"]
         DB[("🗄️ forca-db\nMySQL 8 · Porta 3306")]
     end
