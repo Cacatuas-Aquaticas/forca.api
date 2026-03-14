@@ -1,26 +1,28 @@
+version: '3.8'
+
 services:
   db:
     image: mysql:8
-    container_name: forca-db
+    container_name: forca-db-staging
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: forca
     ports:
-      - "3307:3306"
+      - "3308:3306"
     volumes:
-      - db_data:/var/lib/mysql
+      - db_data_staging:/var/lib/mysql
     networks:
-      - forca-network
+      - forca-staging-network
 
   frontend:
     build:
       context: .
       dockerfile: Dockerfile.frontend
-    container_name: forca-frontend
+    container_name: forca-frontend-staging
     ports:
-      - "8080:80"
+      - "8081:80"
     networks:
-      - forca-network
+      - forca-staging-network
     depends_on:
       - backend
 
@@ -28,7 +30,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: forca-backend
+    container_name: forca-backend-staging
     environment:
       DB_HOST: db
       DB_USER: root
@@ -36,41 +38,40 @@ services:
       DB_NAME: forca
       OPENAI_API_KEY: ${OPENAI_API_KEY}
     ports:
-      - "3000:3000"
+      - "3001:3000"
     volumes:
       - .:/app
     networks:
-      - forca-network
+      - forca-staging-network
     depends_on:
       - db
 
   prometheus:
     image: prom/prometheus:latest
-    container_name: forca-prometheus
+    container_name: forca-prometheus-staging
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
     ports:
-      - "9090:9090"
+      - "9091:9090"
     networks:
-      - forca-network
+      - forca-staging-network
     depends_on:
       - backend
 
   grafana:
     image: grafana/grafana:latest
-    container_name: forca-grafana
+    container_name: forca-grafana-staging
     ports:
-      - "3005:3000"
+      - "3006:3000"
     environment:
       - GF_SECURITY_ADMIN_PASSWORD=admin
     networks:
-      - forca-network
+      - forca-staging-network
     depends_on:
       - prometheus
 
 volumes:
-  db_data:
+  db_data_staging:
 
 networks:
-  forca-network:
-     external: true
+  forca-staging-network:

@@ -65,8 +65,19 @@ caminhar, floresta, coragem, ensinar, progresso, promessa, recordar, liberdade, 
             return filteredWords;
 
     } catch (error) {
-        console.error("Erro ao gerar palavras", error);
-        return [];
+        console.error("Erro ao gerar palavras pela OpenAI (usando fallback local):", error.message || error);
+        
+        // Em caso de falha (falta de cota, chave inválida), retornamos um fallback de palavras 100% brasileiras e validadas
+        const fallbackWords = [
+            "cachorro", "teclado", "floresta", "computador", "telefone",
+            "montanha", "aventura", "elefante", "diamante", "bicicleta",
+            "misterio", "melancia", "fotografia", "maravilha", "horizonte",
+            "esmeralda", "chocolate", "borboleta", "esperanca", "universo",
+            "liberdade", "princesa", "felicidade", "tartaruga", "dinossauro",
+            "biblioteca", "arquitetura", "estudante", "cachoeira", "brinquedo"
+        ];
+        
+        return fallbackWords.filter(word => validateWord(word));
     }
 }
 

@@ -1,1 +1,3 @@
 node_modules/
+forca_gcp_key*
+.env

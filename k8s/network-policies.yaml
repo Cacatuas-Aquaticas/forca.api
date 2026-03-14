@@ -1,0 +1,45 @@
+# Política para Isolamento do Banco de Dados
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: db-network-policy
+  namespace: forca-production
+spec:
+  podSelector:
+    matchLabels:
+      app: forca-db
+  policyTypes:
+  - Ingress # Regula o tráfego de entrada para o Pod
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          app: forca-backend # SOMENTE Podes com a label 'forca-backend' podem chegar neste DB
+    ports:
+    - protocol: TCP
+      port: 3306
+
+---
+# Política para Isolamento do Backend
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: backend-network-policy
+  namespace: forca-production
+spec:
+  podSelector:
+    matchLabels:
+      app: forca-backend
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          app: forca-frontend # Backend só aceita tráfego do Frontend
+    - podSelector:
+        matchLabels:
+          app: prometheus # (Opcional Futuro: permitimos que a observabilidade acesse a porta do backend)
+    ports:
+    - protocol: TCP
+      port: 3000

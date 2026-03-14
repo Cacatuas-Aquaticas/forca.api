@@ -10,9 +10,9 @@ const express = require("express");
 const app = require("./server");
 
 describe("Testando o servidor", () => {
-  it("Deve retornar uma mensagem na rota raiz", async () => {
+  it("Deve retornar a página inicial do frontend", async () => {
     const res = await request(app).get("/");
     expect(res.status).toBe(200);
-    expect(res.text).toBe("Jogo da forca está rodando!");
+    expect(res.text).toContain("<title>Jogo da Forca Premium</title>");
   });
 });

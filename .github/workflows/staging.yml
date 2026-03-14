@@ -1,0 +1,62 @@
+name: Staging CI/CD
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run Units Tests
+        run: npm test
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Install Docker Compose
+        run: |
+          sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+          sudo chmod +x /usr/local/bin/docker-compose
+
+      - name: Build Docker images (Staging Profile)
+        run: |
+          docker-compose -f docker-compose-staging.yml build
+
+      - name: Deploy to Google Cloud VM (Staging)
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.GCP_HOST }}
+          username: ${{ secrets.GCP_USER }}
+          key: ${{ secrets.GCP_SSH_KEY }}
+          script: |
+            mkdir -p /home/${{ secrets.GCP_USER }}/forca-api-staging
+            cd /home/${{ secrets.GCP_USER }}/forca-api-staging
+            
+            # Garanta que o repositório exista
+            if [ ! -d ".git" ]; then
+              git clone https://github.com/Cacatuas-Aquaticas/forca.api.git .
+            fi
+            
+            git fetch origin
+            git checkout develop
+            git pull origin develop
+            
+            # Parar staging anterior e subir novo
+            docker-compose -f docker-compose-staging.yml down
+            docker-compose -f docker-compose-staging.yml pull
+            docker-compose -f docker-compose-staging.yml up --build -d

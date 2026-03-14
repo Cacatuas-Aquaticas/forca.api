@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: forca-frontend
+  namespace: forca-production
+  labels:
+    app: forca-frontend
+spec:
+  replicas: 2 # Alta disponibilidade
+  selector:
+    matchLabels:
+      app: forca-frontend
+  template:
+    metadata:
+      labels:
+        app: forca-frontend
+    spec:
+      containers:
+      - name: frontend
+        image: cacatuasaquaticas/forca-frontend:latest
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: forca-frontend-svc
+  namespace: forca-production
+spec:
+  type: LoadBalancer # ATENÇÃO CRITÉRIO 3.3: Exposição para a rede externa (Nuvem vai criar IP Público)
+  ports:
+  - port: 80
+    targetPort: 80
+  selector:
+    app: forca-frontend

@@ -1,0 +1,300 @@
+:root {
+    --bg-color: #0d1117;
+    --panel-bg: rgba(22, 27, 34, 0.7);
+    --text-primary: #e6edf3;
+    --text-secondary: #8b949e;
+    --accent-color: #58a6ff;
+    --accent-hover: #79c0ff;
+    --error-color: #f85149;
+    --success-color: #2ea043;
+    --key-bg: #21262d;
+    --key-hover: #30363d;
+    --key-disabled: #161b22;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Outfit', sans-serif;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-primary);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-image: radial-gradient(circle at top right, rgba(88, 166, 255, 0.1), transparent 40%),
+                      radial-gradient(circle at bottom left, rgba(248, 81, 73, 0.05), transparent 40%);
+}
+
+.app-container {
+    width: 100%;
+    max-width: 800px;
+    padding: 2rem;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    background: var(--panel-bg);
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+header {
+    text-align: center;
+}
+
+h1 {
+    font-size: 3rem;
+    font-weight: 800;
+    background: linear-gradient(to right, var(--accent-color), #bc8cff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: 4px;
+    margin-bottom: 0.5rem;
+}
+
+header p {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+}
+
+.game-mode-selector {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.mode-btn {
+    background: var(--key-bg);
+    color: var(--text-secondary);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.mode-btn:hover {
+    background: var(--key-hover);
+    color: var(--text-primary);
+}
+
+.mode-btn.active {
+    background: rgba(88, 166, 255, 0.1);
+    color: var(--accent-color);
+    border-color: var(--accent-color);
+}
+
+.game-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    position: relative;
+    min-height: 400px;
+}
+
+.hangman-container {
+    height: 250px;
+    width: 200px;
+}
+
+.hangman-svg {
+    width: 100%;
+    height: 100%;
+    stroke: var(--text-primary);
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.body-part {
+    stroke-width: 4;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.body-part.visible {
+    opacity: 1;
+}
+
+.word-display {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.letter-box {
+    width: 3rem;
+    height: 4rem;
+    border-bottom: 3px solid var(--accent-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: var(--text-primary);
+    transition: all 0.3s ease;
+}
+
+.letter-box.empty {
+    border-bottom: 3px solid var(--key-bg);
+}
+
+.keyboard {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+    max-width: 600px;
+}
+
+.key {
+    background: var(--key-bg);
+    color: var(--text-primary);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    padding: 0.8rem 1.2rem;
+    font-size: 1.2rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* lively pop effect */
+    user-select: none;
+}
+
+.key:hover:not(:disabled) {
+    background: var(--key-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.key:active:not(:disabled) {
+    transform: translateY(1px);
+}
+
+.key.correct {
+    background: rgba(46, 160, 67, 0.2);
+    color: var(--success-color);
+    border-color: var(--success-color);
+}
+
+.key.wrong {
+    background: rgba(248, 81, 73, 0.1);
+    color: var(--error-color);
+    border-color: var(--error-color);
+    opacity: 0.5;
+}
+
+.key:disabled {
+    cursor: not-allowed;
+}
+
+.status-message {
+    font-size: 1.5rem;
+    font-weight: 600;
+    min-height: 2rem;
+    text-align: center;
+}
+
+.status-message.win {
+    color: var(--success-color);
+    text-shadow: 0 0 10px rgba(46, 160, 67, 0.5);
+    animation: popIn 0.5s ease;
+}
+
+.status-message.lose {
+    color: var(--error-color);
+    text-shadow: 0 0 10px rgba(248, 81, 73, 0.5);
+    animation: shake 0.5s ease;
+}
+
+.action-btn {
+    background: linear-gradient(135deg, var(--accent-color), #bc8cff);
+    color: white;
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 30px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 10px 20px rgba(88, 166, 255, 0.3);
+}
+
+.action-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 25px rgba(88, 166, 255, 0.4);
+}
+
+.hidden {
+    display: none !important;
+}
+
+.loading-overlay {
+    position: absolute;
+    inset: 0;
+    background: var(--panel-bg);
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(88, 166, 255, 0.1);
+    border-left-color: var(--accent-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+@keyframes popIn {
+    0% { transform: scale(0.8); opacity: 0; }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+    20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+@media (max-width: 600px) {
+    .app-container {
+        padding: 1rem;
+        border-radius: 0;
+        min-height: 100vh;
+        border: none;
+    }
+    
+    .key {
+        padding: 0.6rem 0.8rem;
+        font-size: 1rem;
+    }
+    
+    .letter-box {
+        width: 2rem;
+        height: 3rem;
+        font-size: 1.5rem;
+    }
+}

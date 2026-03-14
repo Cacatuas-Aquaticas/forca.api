@@ -1,4 +1,4 @@
-name: CI/CD Pipeline
+name: Production CI/CD
 
 on:
   push:
@@ -10,61 +10,43 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Etapa 1: Verificar o código do repositório
       - name: Check out code
         uses: actions/checkout@v2
 
-      # Etapa 2: Configurar o Node.js (ajustado para versão 18)
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 18
           cache: 'npm'
 
-      # Etapa 3: Instalar as dependências do Node.js
       - name: Install dependencies
         run: npm install
 
-      # Etapa 4: Rodar Testes Automatizados
       - name: Run Units Tests
         run: npm test
 
-      # Etapa 5: Configurar Docker Buildx
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
 
-      # Etapa 6: Instalar o Docker Compose
       - name: Install Docker Compose
         run: |
           sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
           sudo chmod +x /usr/local/bin/docker-compose
-          docker-compose --version
 
-      # Etapa 7: Construir imagens Docker (Frontend e Backend) e rodar
-      - name: Build and Run Docker containers (local)
+      - name: Build Docker images
         run: |
-          docker-compose pull
           docker-compose build
-          docker-compose up -d
 
-      # Etapa 7: Aguardar os containers estarem prontos
-      - name: Wait for containers to be ready
-        run: sleep 15
-
-      # Etapa 8: Exibir logs dos containers caso algum erro ocorra
-      - name: Show logs if failure
-        if: failure()
-        run: docker-compose logs
-
-      # Etapa 9: Deploy para Google Cloud Compute Engine via SSH
-      - name: Deploy to Google Cloud VM
+      - name: Deploy to Google Cloud VM (Production)
         uses: appleboy/ssh-action@v0.1.10
         with:
           host: ${{ secrets.GCP_HOST }}
           username: ${{ secrets.GCP_USER }}
           key: ${{ secrets.GCP_SSH_KEY }}
           script: |
+            mkdir -p /home/${{ secrets.GCP_USER }}/forca-api
             cd /home/${{ secrets.GCP_USER }}/forca-api
+            git checkout main
             git pull origin main
             docker-compose down
             docker-compose pull

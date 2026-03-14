@@ -23,8 +23,7 @@ async function getGameWord(req,res){
         let wordEntry = await Word.findOne({ where: {used: false}});
 
         if(!wordEntry){
-            
-            await res.status(500).json({error: "Nenhuma palavra disponível. "});
+            return res.status(500).json({error: "Nenhuma palavra disponível."});
         }
 
         wordEntry.used = true;

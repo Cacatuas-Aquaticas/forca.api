@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jogo da Forca Premium</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <h1>FORCA</h1>
+            <p>Adivinhe a palavra antes que seja tarde</p>
+            <div class="game-mode-selector">
+                <button id="btn-random-word" class="mode-btn active">Palavra Aleatória</button>
+                <button id="btn-daily-word" class="mode-btn">Desafio Diário</button>
+            </div>
+        </header>
+
+        <main class="game-area">
+            <div class="hangman-container">
+                <svg viewBox="0 0 200 250" class="hangman-svg">
+                    <!-- Base -->
+                    <line x1="20" y1="240" x2="180" y2="240" stroke-width="4" />
+                    <!-- Post -->
+                    <line x1="60" y1="240" x2="60" y2="20" stroke-width="4" />
+                    <!-- Top -->
+                    <line x1="60" y1="20" x2="140" y2="20" stroke-width="4" />
+                    <!-- Rope -->
+                    <line x1="140" y1="20" x2="140" y2="50" stroke-width="4" />
+
+                    <!-- Partes do corpo (escondidas inicialmente) -->
+                    <circle id="part-head" cx="140" cy="70" r="20" class="body-part" />
+                    <line id="part-body" x1="140" y1="90" x2="140" y2="150" class="body-part" />
+                    <line id="part-arm-l" x1="140" y1="100" x2="120" y2="130" class="body-part" />
+                    <line id="part-arm-r" x1="140" y1="100" x2="160" y2="130" class="body-part" />
+                    <line id="part-leg-l" x1="140" y1="150" x2="120" y2="190" class="body-part" />
+                    <line id="part-leg-r" x1="140" y1="150" x2="160" y2="190" class="body-part" />
+                </svg>
+            </div>
+
+            <div class="word-display" id="word-display">
+                <!-- Letras serão injetadas aqui via JS -->
+            </div>
+            
+            <div class="status-message" id="status-message"></div>
+
+            <div class="keyboard" id="keyboard">
+                <!-- Teclas serão injetadas aqui via JS -->
+            </div>
+            
+            <button id="btn-restart" class="action-btn hidden">Jogar Novamente</button>
+            
+            <div class="loading-overlay" id="loading">
+                <div class="spinner"></div>
+            </div>
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

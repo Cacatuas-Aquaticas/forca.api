@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: forca-db
+  namespace: forca-production
+  labels:
+    app: forca-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: forca-db
+  template:
+    metadata:
+      labels:
+        app: forca-db
+    spec:
+      containers:
+      - name: mysql
+        image: mysql:8
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: "root"
+        - name: MYSQL_DATABASE
+          value: "forca"
+        ports:
+        - containerPort: 3306
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: forca-db-svc
+  namespace: forca-production
+spec:
+  type: ClusterIP # Isolado dentro do cluster (não exposto)
+  ports:
+  - port: 3306
+    targetPort: 3306
+  selector:
+    app: forca-db
